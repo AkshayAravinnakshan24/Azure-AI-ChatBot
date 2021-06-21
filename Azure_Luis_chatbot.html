@@ -1,0 +1,159 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Chatbot - Star Cooperation GmbH</title>
+    <link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+	rel="stylesheet">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>    
+    <script language="javascript">
+        function myfunction() {
+            var request = $.ajax({
+                //url: "http://localhost:5000/chatbot?query="+ $("#textInput").val(),
+                dataType: "json",
+                url: "https://star-chatbot-luis.azurewebsites.net/chatbot?query="+ $("#textInput").val(),
+                type: 'GET'
+            });
+            request.done(function( msg ) {
+                let txt = msg.msg;
+                txt = txt.replaceAll("\n", "<br />")
+                $("#content").append("<div>"
+                    +"<div class='star right'>"+ $("#textInput").val() + "</div>"
+                    +"<div class='star left "+(msg.type == "FAIL" ? "error" : "")+"'>"+ txt +"</div>"
+                    +"</div>")
+            });
+ 
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+            console.log($("#textInput").val())
+            return false;
+        }
+   
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body{
+            height: 100vh;
+            background-color: #86B918;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo{
+            position:fixed;
+            left:5px;
+            top:10px;
+        }
+        
+        .container{
+            width: 450px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 2px 20px rgba(0,0,0,0.4);
+        }
+
+        .header h1{
+            color: white;
+            padding: 10px; 
+            text-align: center;
+        }
+
+        #content{
+            font-size: 17px;
+            flex: 1;
+            color: white;
+            background-color: rgba(0,0,0,0.7);
+            padding: 20px 30px;
+        }
+
+        .userInput form{
+            display: flex;
+        }
+    
+        #textInput {
+            flex: 1;
+            height: 40px;
+            border: none;
+            outline: none;
+            padding-left: 5px;
+            font-size: 16px;
+        }
+
+        #buttonInput {
+            width: 100px;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: #86B918;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        #buttonInput:hover{
+            background-color: #25b918;
+            transition: 0,2s ease;
+        }
+
+        .star{
+            width: fit-content;
+            color: white;
+            background-color: #86B918; 
+            border-radius: 5px;
+            font-size: 15px;  
+            padding: 10px;
+            margin: 2px 2px;
+            margin-bottom: 15px;
+        }
+
+        .right{
+            margin-left:auto;
+        }
+
+        .left{
+            color: black;
+            background-color: rgb(216, 204, 204);
+        }
+
+        .error{
+            background-color: #faa; 
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="logo">
+        <img src="logo-weiss.png" width="230px">
+    </div>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>STAR AI  Chatbot</h1>
+        </div>
+
+        <div id="content">
+        </div>
+        <div class="userInput">
+            <form onsubmit="return myfunction()">
+                <input id="textInput" type="text" name= "msg" placeholder="Schreib mir...">
+                <input id="buttonInput" type="submit" value="Senden">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
